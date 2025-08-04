@@ -6,6 +6,7 @@ import multer from 'multer';
 import FileMeta from '../models/FileMeta.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const router = express.Router();
 
@@ -58,4 +59,46 @@ router.get('/files', async (_req, res) => {
     }
 });
 
+
+// Route to download a file by ID
+router.get('/download/:id', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const meta = await FileMeta.findById(id);
+        if(!meta) return res.status(404).json({ error: 'File not found'});
+
+        // Resolve the file path to get the absolute filepath
+        const filePath = path.resolve(meta.filepath);
+
+        //res.download sets the appropriate headers and sends the file
+        res.download(filePath, meta.filename);
+    }
+    catch (error) {
+        console.error('Downaload error:', error);
+        res.status(500).json({ error: 'Failed to Downaload file' });
+    }
+});
+
+// Route to delete a file by ID
+router.delete('/files/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        //find the file inside the DB and remove the DB record
+        const meta = await FileMeta.findByIdAndDelete(id);
+        if(!meta) return res.status(404).json({ error: 'File Not Found' });
+
+        // Delete the actual file from the disk
+        const filepath = path.isAbsolute(meta.filepath) ? meta.filepath : path.join(__dirname, '..', meta.filepath);
+        fs.unlink(filepath, err => {
+            if(err) console.error('Error deleting file:', err);
+            else console.log('File deleted successfully');
+        });
+
+        return res.json({ message: 'File deleted successfully' });
+    }
+    catch (error) {
+        console.error('Error deleting file:', error);
+        res.status(500).json({ error: 'Failed to delete file' });
+    }
+});
 export default router;

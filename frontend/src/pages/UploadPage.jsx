@@ -36,13 +36,13 @@ export default function UploadPage() {
 
 
     return (
-        <div>
+        <div className='container'>
             <h1>Upload a File</h1>
-            <form onSubmit={handleSubmit}>
+            <form className='upload-form' onSubmit={handleSubmit}>
                 <input type="file" onChange={handleFileChange} />
                 <button type="submit">Upload</button>
             </form>
-            {messsage && <p>{messsage}</p>}
+            {messsage && <p className='message'>{messsage}</p>}
             {/* Display the list of uploaded files */}
             <FileList />
         </div>
