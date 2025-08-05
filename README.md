@@ -50,3 +50,53 @@ Features include file upload, metadata listing, download, and deletion, with a f
       PORT=3000
    ```
 2. Whitelist your IP in MongoDB Atlas Network Access.
+
+---
+
+## 🚀 Running Locally
+
+1. Start the Backend
+   ```bash
+      cd backend
+      node server.js
+   ```
+   Visit or open localhost:3000 on your browser or the PORT that you have set in your code accordingly.
+2. Start the Frontend
+   ```bash
+      cd backend
+      node server.js
+   ```
+Visit : http://localhost:5173
+
+---
+
+## 🔗 API Endpoints
+| Method | Route | Description |
+|---|---|---|
+| POST | `/api/upload` | Upload a file |
+| GET | `/api/files` | List all uploaded files |
+| GET | `/api/download/:id` | Download file by ID |
+| DELETE | `/api/files/:id` | Delete file by ID |
+
+---
+## 🖥️ Frontend
+Frontend
+- UploadPage: Form to select and upload files.
+
+- FileList: Displays list of uploaded files with Download/Delete actions.
+
+## Screenshots
+Add screenshots of the Upload form and File list here (e.g., docs/upload.png, docs/list.png).
+These will be coming soon...
+
+## 🔮 Future Features
+- User authentication (JWT)
+
+- AI-powered file tagging and search
+
+- File sharing via secure links
+
+- Pagination and search/filter capabilities on frontend
+---
+## Contributing
+Contributions welcome! Please open issues or submit pull requests for improvements.
