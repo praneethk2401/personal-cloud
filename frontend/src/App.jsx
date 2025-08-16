@@ -1,7 +1,18 @@
-import UploadPage from './pages/UploadPage';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+
 
 function App() {
-  return <UploadPage />;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        {/* Add protected routes later */}
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

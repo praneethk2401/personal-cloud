@@ -5,7 +5,7 @@ const fileMetaSchema = new mongoose.Schema({
   filepath: { type: String, required: true },
   size: Number,
   mimetype: String,
-  ownerId: { type: String, default: 'demoUser' },
+  ownerId: { type: String, required: true }, // Associate the file with the authenticated user
   createdAt: { type: Date, default: Date.now },
   aiTags: {String},
 });

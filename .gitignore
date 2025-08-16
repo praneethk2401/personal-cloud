@@ -1,2 +1,24 @@
+# Node modules
+node_modules/
+
+# Environment secrets
 .env
-*/.env
+.env.*
+
+# Build outputs
+dist/
+build/
+
+# Logs and lock files
+*.log
+*.lock
+
+# IDE settings
+.vscode/
+.idea/
+
+# OS-specific
+.DS_Store
+
+# Uploads
+uploads/

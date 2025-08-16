@@ -4,6 +4,7 @@
 import express from 'express';
 import multer from 'multer';
 import FileMeta from '../models/FileMeta.js';
+import { requireAuth } from '../middleware/authMiddleware.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
@@ -25,7 +26,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 // Route to handle file upload
-router.post('/upload', upload.single('file'), async (req, res) => {
+router.post('/upload', requireAuth, upload.single('file'), async (req, res) => {
+    const userId = req.user.userId; // Get user ID from the authenticated user
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' }); // Check if file is present
+    }
     try {
         const { originalname, mimetype, size, filename, path: filepath } = req.file;
 
@@ -35,6 +40,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
             filepath: filepath,
             size,
             mimetype: mimetype,
+            ownerId: userId, // Associate the file with the authenticated user
 
         });
 
@@ -47,10 +53,16 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     }
 });
 
-// Route to get all uploaded files metadata
-router.get('/files', async (_req, res) => {
+// Route to get all uploaded files metadata for the authenticated user
+// This will be used to display the list of uploaded files in the frontend
+router.get('/files', requireAuth, async (req, res) => {
+
     try {
-        const list = await FileMeta.find().sort({ uploadDate: -1 });
+        const userId = req.user.userId; // Get user ID from the authenticated user
+        const list = await FileMeta.find({ ownerId: userId }).sort({ uploadDate: -1 }); // Find all files uploaded by the user and sort them by upload date
+        if (list.length === 0) {
+            return res.status(404).json({ message: 'No files found' }); // Check if any files are present
+        }
         res.json(list);
     }
     catch (error) {
@@ -60,11 +72,13 @@ router.get('/files', async (_req, res) => {
 });
 
 
-// Route to download a file by ID
-router.get('/download/:id', async (req, res) => {
+// Route to download a file by ID only for authenticated users
+// This will be used to download the file from the frontend
+router.get('/download/:id', requireAuth, async (req, res) => {
     try {
         const {id} = req.params;
-        const meta = await FileMeta.findById(id);
+        const userId = req.user.userId; // Get user ID from the authenticated user
+        const meta = await FileMeta.findOne({ _id: id, ownerId: userId})  // Find the file metadata by ID
         if(!meta) return res.status(404).json({ error: 'File not found'});
 
         // Resolve the file path to get the absolute filepath
@@ -80,12 +94,14 @@ router.get('/download/:id', async (req, res) => {
 });
 
 // Route to delete a file by ID
-router.delete('/files/:id', async (req, res) => {
+router.delete('/files/:id', requireAuth, async (req, res) => {
     try {
         const { id } = req.params;
+        const userId = req.user.userId; // Get user ID from the authenticated user
         //find the file inside the DB and remove the DB record
-        const meta = await FileMeta.findByIdAndDelete(id);
-        if(!meta) return res.status(404).json({ error: 'File Not Found' });
+        const meta = await FileMeta.findByIdAndDelete({ _id: id, ownerId: userId }); // Find the file metadata by ID and delete it
+
+        if(!meta) return res.status(404).json({ error: 'File Not Found' }); // Check if the file metadata exists
 
         // Delete the actual file from the disk
         const filepath = path.isAbsolute(meta.filepath) ? meta.filepath : path.join(__dirname, '..', meta.filepath);

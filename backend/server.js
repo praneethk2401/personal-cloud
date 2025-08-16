@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import uploadRouter from './routes/upload.js';
+import authRouter from './routes/auth.js';
 
 
 dotenv.config();
@@ -15,7 +16,10 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/api', uploadRouter);
+
+//Middlewares
+app.use('/api', uploadRouter); // Middleware for handling file uploads
+app.use('/api/auth', authRouter); // Middleware for authentication routes
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Personal Cloud API');
