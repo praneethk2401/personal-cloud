@@ -1,16 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect, use } from 'react';
 import FileList from '../components/FileList';
+import { useNavigate } from 'react-router-dom';
+import { isAuthenticated } from '../utils/auth';
 
 export default function UploadPage() {
+    const navigate = useNavigate();
     const [file, setFile] = useState(null);
     const [messsage, setMessage] = useState('');
+    // Check if the user is authenticated. If not, redirect to the login page
+    useEffect(() => {
+        if(!isAuthenticated()) {
+            navigate('/login');
+        }
+    }, []);
 
-    // TODO: Handle File change, handle submit
+    // Handle File change
     function handleFileChange(event) {
         console.log('File selected:', event.target.files[0]);
         setFile(event.target.files[0]);
     }
-
+    // Handle file upload submission
     async function handleSubmit(event) {
         event.preventDefault();
         console.log('Submitting file:', file);
@@ -22,6 +31,7 @@ export default function UploadPage() {
         try{
             const res = await fetch('http://localhost:3000/api/upload', {
                 method: 'POST',
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
                 body: formData,
             });
             const data = await res.json();

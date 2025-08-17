@@ -8,7 +8,7 @@ function LoginPage() {
     const navigate = useNavigate();
 
     const handleLogin = async (event) => {
-        event.preentDefault();
+        event.preventDefault();
         try {
             const res = await fetch('http://localhost:3000/api/auth/Login', {
                 method: "POST",
@@ -18,9 +18,14 @@ function LoginPage() {
 
             const data = await res.json();
             if(res.ok) {
+                console.log("res.ok:", res.ok);
+                console.log("data:", data);
                 localStorage.setItem('token', data.token); // Store the JWT token in local storage
+                console.log("Storing user data in local storage");
+                localStorage.setItem('user', JSON.stringify(data.user)); // Store the JWT token in local storage
                 setMessage('Login successful! Redirecting to home page...');
-                navigate('/'); // Redirect to home page after successful login
+                console.log('Navigating to dashboard');
+                navigate('/dashboard'); // Redirect to home page after successful login
             }
             else {
                 setMessage(`Login failed: ${data.message}`);
