@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import UploadPage from './pages/UploadPage';
 import MyFilesPage from './pages/MyFilesPage';
 import { isAuthenticated } from './utils/auth';
+import './index.css';
 
 // This component wraps the Router and checks authentication status
 // It redirects to the login page if the user is not authenticated
