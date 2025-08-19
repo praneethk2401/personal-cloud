@@ -1,9 +1,17 @@
-import React from "react";
+import React, { use, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../utils/auth";
+// This component serves as the landing page for the application
+// It provides options for users to login or register
 
 const HomePage = () => {
     const navigate = useNavigate();
-
+    useEffect(() => {
+        if(isAuthenticated()) {
+            // If the user is not authenticated, redirect to the dashboard
+            navigate('/dashboard');
+        }
+    }, []);
     return (
         <div className="min-h-screen flex items-center justify-center bg-sky-50 p-6">
             <h1 className="text-4xl font-bold mb-4">Welcome to Personal Cloud</h1>

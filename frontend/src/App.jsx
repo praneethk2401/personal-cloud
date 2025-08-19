@@ -4,21 +4,12 @@ import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import Dashboard from './pages/Dashboard';
 import UploadPage from './pages/UploadPage';
+import MyFilesPage from './pages/MyFilesPage';
 import { isAuthenticated } from './utils/auth';
-import { useEffect } from 'react';
 
 // This component wraps the Router and checks authentication status
 // It redirects to the login page if the user is not authenticated
 function AppWrapper() {
-  const navigate = useNavigate();
-  useEffect(() => {
-      // Check of the user is authenticated on initial load
-      if(!isAuthenticated()) {
-        localStorage.removeItem('token'); // Clear token if not authenticated
-        localStorage.removeItem('user'); // Clear user data if not authenticated
-        navigate('/login'); // Redirect to login page
-      }
-    }, []);
   return (
       <Routes>
         {/* Public Routes, user is first nteracting with these routes */}
@@ -33,6 +24,10 @@ function AppWrapper() {
         <Route 
           path="/upload" 
           element={isAuthenticated() ? <UploadPage /> : <Navigate to="/login" replace />} 
+        />
+        <Route
+          path="/my-files" 
+          element={isAuthenticated() ? <MyFilesPage /> : <Navigate to="/login" replace />} 
         />
 
         {/* Catch all unknown routes and navigate back to Homepage */}

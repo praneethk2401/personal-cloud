@@ -35,14 +35,20 @@ const DashboardPage = () => {
 
             <ul className="list-disc pl-6 mb-4">
                 <li className="mb-2">View your files</li>
-                <li className="mb-2">Upload new files</li>
-                <li className="mb-2">Manage your account settings</li>
+                <li className="mb-2">Upload new files
+                    <button 
+                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ml-2"
+                        onClick={() => navigate('/upload')}>Upload
+                    </button>
+                </li>
+                <li className="mb-2">My Files
+                    <button 
+                        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 ml-2"
+                        onClick={() => navigate('/my-files')}>View Files
+                    </button>
+                </li>
             </ul>
             {/* ⬇️ Upload section embedded here ⬇️ */}
-            <div className="my-6 border-t pt-4">
-                <h2 className="text-2xl font-semibold mb-2">Upload Files</h2>
-                <UploadPage />
-            </div>
             <button 
                 className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700"
                 onClick={handleLogout}>
