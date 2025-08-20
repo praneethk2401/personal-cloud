@@ -91,7 +91,7 @@ These will be coming soon...
 
 ## 🔮 Future Features
 - User authentication (JWT)
-
+Implemented the User Authentication JWT, user can login or register if a new user and use the app.
 - AI-powered file tagging and search
 
 - File sharing via secure links
