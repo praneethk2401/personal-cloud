@@ -8,6 +8,6 @@ const fileMetaSchema = new mongoose.Schema({
   ownerId: { type: String, required: true }, // Associate the file with the authenticated user
   createdAt: { type: Date, default: Date.now },
   aiTags: {String},
-});
+}, { timestamps: true });
 
 export default mongoose.model('FileMeta', fileMetaSchema);

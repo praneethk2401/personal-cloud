@@ -25,7 +25,7 @@ function LoginPage() {
                 localStorage.setItem('user', JSON.stringify(data.user)); // Store the JWT token in local storage
                 setMessage('Login successful! Redirecting to home page...');
                 console.log('Navigating to dashboard');
-                navigate('/dashboard'); // Redirect to home page after successful login
+                window.location.replace('/dashboard'); // Redirect to home page after successful login
             }
             else {
                 setMessage(`Login failed: ${data.message}`);

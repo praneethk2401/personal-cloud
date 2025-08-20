@@ -102,7 +102,10 @@ const MyFilesPage = () => {
                             <tr key={file._id} className="hover:bg-gray-100">
                                 <td className="border px-4 py-2 text-center">{file.filename}</td>
                                 <td className="border px-4 py-2 text-center">{(file.size / 1024).toFixed(2)} KB</td>
-                                <td className="border px-4 py-2 text-center">{new Date(file.uploadDate).toLocaleDateString()}</td>
+                                <td className="border px-4 py-2 text-center">
+                                    {new Intl.DateTimeFormat('en-GB').format(new Date(file.createdAt))}
+                                </td>
+
                                 <td className="border px-4 py-2 text-center">
                                     <button 
                                         className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-2"
