@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider } from './contexts/ThemeContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
@@ -9,15 +10,14 @@ import { isAuthenticated } from './utils/auth';
 import './index.css';
 
 // This component wraps the Router and checks authentication status
-// It redirects to the login page if the user is not authenticated
 function AppWrapper() {
   return (
       <Routes>
-        {/* Public Routes, user is first nteracting with these routes */}
+        {/* Public Routes, user is first interacting with these routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        {/* protected routes, only accessible when the user is authenticated (Registered or logged in) */}
+        {/* protected routes, only accessible when the user is authenticated */}
         <Route 
           path="/dashboard" 
           element={isAuthenticated() ? <Dashboard /> : <Navigate to="/login" replace />} 
@@ -35,15 +35,15 @@ function AppWrapper() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
   );
-
 }
-// Used the AppWrapper component because we can't useEffect directly in the main App component
-// This is because the App component is not a child of the Router, so it doesn't have
+
 function App() {
   return (
-    <Router>
-      <AppWrapper />
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <AppWrapper />
+      </Router>
+    </ThemeProvider>
   );
 }
 

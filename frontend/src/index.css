@@ -1,79 +1,69 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-/*Center the main container*/
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 1rem;
-  font-family: sans-serif;
-}
-
-/*Style for Upload form*/
-.upload-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  width: 100%;
-  margin-bottom: 2rem;
-}
-
-.upload-form input[type="file"] {
-  padding: 0.5rem;
-}
-
-.upload-form button {
-  padding: 0.6rem;
-  border: none;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-}
-
-.upload-form button:hover {
-  background-color: #0056b3;
-}
-
-/*Style for feedback messages*/
-.message {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-/*Style for file list*/
-.file-list {
-  list-style: none;
+* {
+  margin: 0;
   padding: 0;
-  width: 100%;
+  box-sizing: border-box;
 }
 
-.file-item {
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Basic utility classes */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.flex {
   display: flex;
-  justify-content: space-between;
-  padding: 0.5rem;
-  border-bottom: 1px solid #ddd;
 }
 
-.file-item:nth-child(odd) {
-  background-color: #f9f9f9;
+.flex-col {
+  flex-direction: column;
 }
 
-.download-btn {
-  margin-left: 0.5rem;
-  padding: 0.3rem 0.6rem;
-  border: 3px solid #0366d6;
-  border-radius: 4px;
-  background-color: white;
-  color: #0366d6;
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.space-y-4 > * + * {
+  margin-top: 1rem;
+}
+
+button {
+  border: none;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.download-btn:hover {
-  background-color: #0366d6;
-  color: white;
+button:hover {
+  opacity: 0.9;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
