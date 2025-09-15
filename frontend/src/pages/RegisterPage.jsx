@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
+import { API_URLS } from '../config';
 
 function RegisterPage() {
     const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ function RegisterPage() {
     const handleRegister = async (event) => {
         event.preventDefault();
         try {
-            const res = await fetch ('http://localhost:3000/api/auth/register', {
+            const res = await fetch(API_URLS.AUTH.REGISTER, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
+import { API_URLS } from "../config";
 
 const MyFilesPage = () => {
     const [files, setFiles] = useState([]);
@@ -11,7 +12,7 @@ const MyFilesPage = () => {
     const fetchFiles = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:3000/api/files', {
+            const res = await fetch(API_URLS.FILES.LIST, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -33,7 +34,7 @@ const MyFilesPage = () => {
     const handleDownload = async (fileId) => {
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`http://localhost:3000/api/download/${fileId}`, {
+            const res = await fetch(`${API_URLS.FILES.LIST}/${fileId}/download`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -62,10 +63,11 @@ const MyFilesPage = () => {
     const handleDelete = async (id) => {
         const token = localStorage.getItem('token');
         try {
-            const res = await fetch(`http://localhost:3000/api/files/${id}`, {
-                method: `DELETE`,
+            const res = await fetch(`${API_URLS.FILES.LIST}/${id}`, {
+                method: 'DELETE',
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
 

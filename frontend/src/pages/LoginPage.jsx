@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
 import { setToken, setUser } from '../utils/auth';
+import { API_URLS } from '../config';
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ function LoginPage() {
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
-            const res = await fetch('http://localhost:3000/api/auth/login', {
+            const res = await fetch(API_URLS.AUTH.LOGIN, {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify({ email, password }),

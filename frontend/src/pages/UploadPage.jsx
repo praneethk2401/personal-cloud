@@ -1,8 +1,9 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import FileList from '../components/FileList';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import { isAuthenticated } from '../utils/auth';
+import { API_URLS } from '../config';
 
 export default function UploadPage() {
     const navigate = useNavigate();
@@ -33,9 +34,12 @@ export default function UploadPage() {
         formData.append('file', file);
 
         try{
-            const res = await fetch('http://localhost:3000/api/upload', {
+            const res = await fetch(API_URLS.FILES.UPLOAD, {
                 method: 'POST',
-                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+headers: { 
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Accept': 'application/json'
+                },
                 body: formData,
             });
             const data = await res.json();
