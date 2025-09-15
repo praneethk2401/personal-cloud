@@ -99,7 +99,7 @@ router.delete('/files/:id', requireAuth, async (req, res) => {
         const { id } = req.params;
         const userId = req.user.userId; // Get user ID from the authenticated user
         //find the file inside the DB and remove the DB record
-        const meta = await FileMeta.findByIdAndDelete({ _id: id, ownerId: userId }); // Find the file metadata by ID and delete it
+        const meta = await FileMeta.findOneAndDelete({ _id: id, ownerId: userId }); // Find the file metadata by ID and delete it
 
         if(!meta) return res.status(404).json({ error: 'File Not Found' }); // Check if the file metadata exists
 

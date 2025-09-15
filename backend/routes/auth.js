@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body; // Extracting email and password from request body
     try {
         const user = await User.findOne({ email }); // Finding user by email
-        if(!user) return res.status(400).json({ message: 'User not found, Ivaldi username or passowrd' });
+        if(!user) return res.status(400).json({ message: 'User not found, Invalid username or passowrd' });
 
         const validPassword = await bcrypt.compare(password, user.passwordHash); // Comparing provided password with stored hash
         if(!validPassword) return res.status(400).json({ message: 'Invalid username or password' });

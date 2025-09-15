@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
+import { isAuthenticated } from "../utils/auth";
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -8,9 +9,15 @@ const Dashboard = () => {
     const [user, setUser] = useState({ email: '' });
 
     useEffect(() => {
+        if(!isAuthenticated()) {
+        navigate('/login');
+        return;
+    }
         const storedUser = localStorage.getItem('user');
+        console.log('Stored user from localStorage:', storedUser);
         if(storedUser) {
             const parsedUser = JSON.parse(storedUser);
+            console.log("Parsed user object:", parsedUser);
             const email = parsedUser.email || '';
             const namePart = email.split('@')[0];
             const capitalized =

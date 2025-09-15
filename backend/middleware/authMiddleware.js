@@ -4,7 +4,7 @@ import User from '../models/User.js';
 export function requireAuth(req, res, next) {
     const authHeader = req.headers.authorization; // `Authorization` header contains the token
     if(!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ message: 'Unauthorized: No tolen provided' }); // Check if the header is present
+        return res.status(401).json({ message: 'Unauthorized: No token provided' }); // Check if the header is present
     }
 
     const token = authHeader.split(' ')[1]; // Extract the token from the header
