@@ -5,7 +5,7 @@ const API_BASE_URL = window.location.hostname === 'localhost'
   ? 'http://localhost:3000'  // Local development
   : 'https://personal-cloud-backend.onrender.com'; // Production
 
-console.log('Using API Base URL:', API_BASE_URL);
+console.log('Using API Base URL:', API_BASE_URL); // to know which URL is being used
 
 export const API_URLS = {
   AUTH: {
