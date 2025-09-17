@@ -19,9 +19,7 @@ const corsOptions = {
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:5173',
-      'https://personal-cloud-mj9fb4ko1-praneeth-kulkarnis-projects.vercel.app',
-      'https://personal-cloud-frontend.vercel.app',
-      'https://personal-cloud-praneethk2401.vercel.app'
+      'https://personal-cloud-omega.vercel.app/', // Vercel frontend main domain, this wont change with every deplyment
     ];
     
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
