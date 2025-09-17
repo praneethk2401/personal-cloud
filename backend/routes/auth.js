@@ -27,22 +27,70 @@ router.post('/register', async (req, res) => {
     }
 });
 
-//Route for user Login
+// Route for user Login
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body; // Extracting email and password from request body
-    try {
-        const user = await User.findOne({ email }); // Finding user by email
-        if(!user) return res.status(400).json({ message: 'User not found, Invalid username or passowrd' });
-
-        const validPassword = await bcrypt.compare(password, user.passwordHash); // Comparing provided password with stored hash
-        if(!validPassword) return res.status(400).json({ message: 'Invalid username or password' });
-
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN }); // Generating JWT token
-        res.status(200).json({ token, user: { id: user._id, email: user.email } }); // Sending token and user info in response
-
+    console.log('Login attempt:', { email: req.body.email });
+    
+    const { email, password } = req.body;
+    
+    // Input validation
+    if (!email || !password) {
+        console.log('Missing credentials');
+        return res.status(400).json({ 
+            success: false,
+            message: 'Please provide both email and password' 
+        });
     }
-    catch (error) {
-        res.status(500).json({ message: 'Login Failed', error: error.message });
+
+    try {
+        // Find user by email
+        const user = await User.findOne({ email }).select('+passwordHash');
+        
+        if (!user) {
+            console.log('User not found:', email);
+            return res.status(401).json({ 
+                success: false,
+                message: 'Invalid email or password' 
+            });
+        }
+
+        // Verify password
+        const validPassword = await bcrypt.compare(password, user.passwordHash);
+        if (!validPassword) {
+            console.log('Invalid password for user:', email);
+            return res.status(401).json({ 
+                success: false,
+                message: 'Invalid email or password' 
+            });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { userId: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+        );
+
+        console.log('Login successful for user:', email);
+        
+        // Send response with token and user data (excluding password)
+        res.status(200).json({
+            success: true,
+            token,
+            user: {
+                id: user._id,
+                email: user.email,
+                name: user.name
+            }
+        });
+
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({ 
+            success: false,
+            message: 'An error occurred during login',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 });
 

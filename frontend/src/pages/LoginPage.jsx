@@ -13,30 +13,68 @@ function LoginPage() {
 
     const handleLogin = async (event) => {
         event.preventDefault();
+        setMessage('');
+        
+        if (!email || !password) {
+            setMessage('Please enter both email and password');
+            return;
+        }
+
         try {
-            const res = await fetch(API_URLS.AUTH.LOGIN, {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json'},
+            console.log('Attempting login with:', { email });
+            console.log('Login URL:', API_URLS.AUTH.LOGIN);
+            
+            const response = await fetch(API_URLS.AUTH.LOGIN, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 body: JSON.stringify({ email, password }),
+                credentials: 'include',
+                mode: 'cors'
             });
 
-            const data = await res.json();
-            if(res.ok) {
-                console.log("res.ok:", res.ok);
-                console.log("data:", data);
-                setToken(data.token);
-                setUser(data.user);
-                setMessage('Login successful! Redirecting to dashboard...');
-                console.log('Navigating to dashboard');
-                navigate('/dashboard');
+            console.log('Response status:', response.status);
+            
+            let data;
+            try {
+                data = await response.json();
+                console.log('Login response data:', data);
+            } catch (jsonError) {
+                console.error('Error parsing JSON response:', jsonError);
+                const text = await response.text();
+                console.error('Raw response text:', text);
+                throw new Error(`Invalid response from server: ${text}`);
             }
-            else {
-                setMessage(`Login failed: ${data.message || data.error}`);
+
+            if (response.ok) {
+                if (data.token) {
+                    setToken(data.token);
+                    setUser(data.user);
+                    setMessage('Login successful! Redirecting to dashboard...');
+                    navigate('/dashboard');
+                } else {
+                    throw new Error('No token received in response');
+                }
+            } else {
+                const errorMessage = data.message || data.error || 'Login failed. Please try again.';
+                setMessage(`Login failed: ${errorMessage}`);
+                
+                if (response.status === 401) {
+                    setMessage('Invalid email or password');
+                } else if (response.status >= 500) {
+                    setMessage('Server error. Please try again later.');
+                }
             }
-        }
-        catch (error) {
-            console.error('Login error:', error);
-            setMessage('Login failed due to an error');
+        } catch (error) {
+            console.error('Login error details:', {
+                name: error.name,
+                message: error.message,
+                stack: error.stack,
+                response: error.response
+            });
+            setMessage(error.message || 'Login failed. Please check console for details and try again.');
         }
     };
 

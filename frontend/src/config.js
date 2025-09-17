@@ -1,6 +1,11 @@
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://personal-cloud-backend-6u3e.onrender.com' 
-  : 'http://localhost:3000';
+// For debugging
+console.log('Current NODE_ENV:', process.env.NODE_ENV);
+
+const API_BASE_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:3000'  // Local development
+  : 'https://personal-cloud-backend.onrender.com'; // Production
+
+console.log('Using API Base URL:', API_BASE_URL);
 
 export const API_URLS = {
   AUTH: {
