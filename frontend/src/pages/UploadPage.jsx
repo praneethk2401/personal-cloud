@@ -240,27 +240,6 @@ headers: {
                         </div>
                     )}
                 </div>
-
-                {/* FileList Component */}
-                <div 
-                    className="rounded-xl shadow-lg overflow-hidden"
-                    style={{ backgroundColor: colors.card }}
-                >
-                    <div 
-                        className="p-6 border-b"
-                        style={{ borderColor: colors.paragraph + '20' }}
-                    >
-                        <h3 
-                            className="text-xl font-bold"
-                            style={{ color: colors.headline }}
-                        >
-                            📋 Recent Uploads
-                        </h3>
-                    </div>
-                    <div className="p-6">
-                        <FileList />
-                    </div>
-                </div>
             </div>
         </div>
     );
