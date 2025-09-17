@@ -19,7 +19,7 @@ const corsOptions = {
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:5173',
-      'https://personal-cloud-omega.vercel.app/', // Vercel frontend main domain, this wont change with every deplyment
+      'https://personal-cloud-psi.vercel.app', // Vercel frontend main domain, this wont change with every deplyment
     ];
     
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
