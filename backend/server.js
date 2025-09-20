@@ -6,9 +6,14 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import uploadRouter from './routes/upload.js';
 import authRouter from './routes/auth.js';
+import { validateEnv } from './utils/validateEnv.js';
+import errorMiddleware from './middleware/errorMiddleware.js';
 
 
 dotenv.config();
+
+// Validate environment variables
+validateEnv();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,4 +56,8 @@ mongoose
   .then(() => console.log('✅ MongoDB connected'))
   .catch(err => console.error('❌ MongoDB connection error:', err));
 
-app.listen(PORT, () => console.log(`🚀 Server is running on port ${PORT}`));
+// Error handling middleware (must be last)
+app.use(errorMiddleware.notFound);
+app.use(errorMiddleware.errorHandler);
+
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

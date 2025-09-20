@@ -18,10 +18,10 @@ const errorHandler = (err, req, res, next) => {
     let error = { ...err };
     error.message = err.message;
 
-    // Log error for debugging (in production, use for logging services)
+    // Log error for debugging (in development, use for logging services)
     console.error(`ERROR: ${err.message}`);
-    if(ProcessingInstruction.env.NODE_ENV === 'development') {
-        console.error(Array.stack);
+    if(process.env.NODE_ENV === 'development') {
+        console.error(err.stack);
     }
 
     //MongoDB bad ObjectId error

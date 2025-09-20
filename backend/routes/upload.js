@@ -15,16 +15,30 @@ const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//Multer setup for file uploads
-const storage = multer.diskStorage({
-    destination: path.join(__dirname, '../uploads'),
-    filename: (_req, file, cb) => {
-        const unique = Date.now() + '-' + file.originalname;
-        cb(null, unique);
-    },
-});
+// File type validation function
+const fileFilter = (req, file, cb) => {
+    const allowedTypes = [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/gif',
+        'image/webp',
+        'application/pdf',
+        'text/plain',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+    ];
 
-const upload = multer({ storage });
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error(`File type ${file.mimetype} is not allowed. Allowed types: images, PDF, text, and office documents.`), false);
+    }
+};
 // Route to handle file upload
 router.post('/upload', requireAuth, upload.single('file'), async (req, res) => {
     const userId = req.user.userId; // Get user ID from the authenticated user
