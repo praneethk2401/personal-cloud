@@ -3,15 +3,71 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../contexts/ThemeContext";
 import { API_URLS } from '../config';
 
+// Password Input Component with Toggle (same as LoginPage)
+const PasswordInput = ({ value, onChange, placeholder, colors, required = false }) => {
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    return (
+        <div className="relative">
+            <input
+                type={showPassword ? "text" : "password"}
+                placeholder={placeholder}
+                value={value}
+                onChange={onChange}
+                required={required}
+                className="w-full p-4 pr-12 rounded-lg border transition-all duration-300"
+                style={{ 
+                    backgroundColor: colors.bg,
+                    borderColor: colors.paragraph + '40',
+                    color: colors.headline
+                }}
+            />
+            <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-lg transition-all duration-300 hover:opacity-70"
+                style={{ 
+                    color: colors.paragraph,
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '4px'
+                }}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+                {showPassword ? '🙈' : '👁️'}
+            </button>
+        </div>
+    );
+};
+
 function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
     const { isDarkMode, colors, toggleTheme } = useTheme();
 
     const handleRegister = async (event) => {
         event.preventDefault();
+        
+        // Password confirmation validation
+        if (password !== confirmPassword) {
+            setMessage('Passwords do not match!');
+            return;
+        }
+
+        // Basic password strength validation
+        if (password.length < 6) {
+            setMessage('Password must be at least 6 characters long');
+            return;
+        }
+
         try {
             const res = await fetch(API_URLS.AUTH.REGISTER, {
                 method: 'POST',
@@ -135,18 +191,22 @@ function RegisterPage() {
                     </div>
                     
                     <div>
-                        <input
-                            type="password"
-                            placeholder="Create Password"
+                        <PasswordInput
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            required
-                            className="w-full p-4 rounded-lg border transition-all duration-300"
-                            style={{ 
-                                backgroundColor: colors.bg,
-                                borderColor: colors.paragraph + '40',
-                                color: colors.headline
-                            }}
+                            placeholder="Create Password"
+                            colors={colors}
+                            required={true}
+                        />
+                    </div>
+
+                    <div>
+                        <PasswordInput
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Confirm Password"
+                            colors={colors}
+                            required={true}
                         />
                     </div>
 
