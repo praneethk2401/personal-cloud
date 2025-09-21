@@ -8,6 +8,7 @@ import uploadRouter from './routes/upload.js';
 import authRouter from './routes/auth.js';
 import { validateEnv } from './utils/validateEnv.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
+import sharingRoutes from './routes/sharing.js';
 
 
 dotenv.config();
@@ -44,6 +45,8 @@ app.use(express.json());
 //Middlewares
 app.use('/api', uploadRouter); // Middleware for handling file uploads
 app.use('/api/auth', authRouter); // Middleware for authentication routes
+app.use('/api/sharing', sharingRoutes); // Middleware for sharing routes
+
 
 app.get('/', (req, res) => {
   res.send('Welcome to the Personal Cloud API');
